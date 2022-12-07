@@ -38,8 +38,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     (new JoystickButton(controller, JoystickConstants.BUTTON_A)).whileHeld(new RunShooter(shooter, () -> 1d));
     (new JoystickButton(controller, JoystickConstants.BUTTON_B)).whileHeld(new RunCollector(collector, () -> 1d));
-    (new JoystickButton(controller, JoystickConstants.LEFT_BUMPER)).whileHeld(new RunSpindexer(spindexer, () -> -1));
-    (new JoystickButton(controller, JoystickConstants.RIGHT_BUMPER)).whileHeld(new RunSpindexer(spindexer, () -> 1));
+    (new JoystickButton(controller, JoystickConstants.LEFT_BUMPER)).whileHeld(new RunSpindexer(spindexer, () -> -1d));
+    (new JoystickButton(controller, JoystickConstants.RIGHT_BUMPER)).whileHeld(new RunSpindexer(spindexer, () -> 1d));
   }
 
   public Command getAutonomousCommand() {
