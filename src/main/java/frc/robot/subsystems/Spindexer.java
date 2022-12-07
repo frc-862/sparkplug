@@ -28,6 +28,6 @@ public class Spindexer extends SubsystemBase {
   }
 
   public void stop() {
-    setPower(0);
+    setPower(0d);
   }
 }
