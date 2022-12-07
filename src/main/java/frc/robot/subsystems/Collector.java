@@ -28,6 +28,14 @@ public class Collector extends SubsystemBase {
     spinny.set(power);
   }
 
+  public void runUpperBelt(double power) {
+    upperBelt.set(power);
+  }
+
+  public void stopUpperBelt() {
+    upperBelt.set(0d);
+  }
+
   public void stop() {
     setPower(0);
   }

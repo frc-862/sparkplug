@@ -24,10 +24,11 @@ public class Spindexer extends SubsystemBase {
 
   public void setPower(double power) {
     spindexMotor.set(power);
-    collector.upperBelt.set(power);
+    collector.runUpperBelt(power);
   }
 
   public void stop() {
     setPower(0);
+    collector.stopUpperBelt();
   }
 }

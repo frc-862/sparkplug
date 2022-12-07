@@ -4,14 +4,16 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class RunShooter extends CommandBase {
   Shooter shooter;
-  double power;
+  DoubleSupplier power;
 
-  public RunShooter(Shooter shooter, double power) {
+  public RunShooter(Shooter shooter, DoubleSupplier power) {
     this.shooter = shooter;
     this.power = power;
 
@@ -20,7 +22,7 @@ public class RunShooter extends CommandBase {
 
   @Override
   public void execute() {
-    shooter.setPower(power);
+    shooter.setPower(power.getAsDouble());
   }
 
   @Override

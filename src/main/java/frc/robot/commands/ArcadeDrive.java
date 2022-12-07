@@ -9,22 +9,24 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class TankDrive extends CommandBase {
+public class ArcadeDrive extends CommandBase {
   Drivetrain drivetrain;
-  DoubleSupplier leftPower;
-  DoubleSupplier rightPower;
+  DoubleSupplier throttleF;
+  DoubleSupplier throttleR;
+  DoubleSupplier rotation;
 
-  public TankDrive(Drivetrain drivetrain, DoubleSupplier left, DoubleSupplier right) {
+  public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier throttleF, DoubleSupplier throttleR, DoubleSupplier rotation) {
     this.drivetrain = drivetrain;
-    this.leftPower = left;
-    this.rightPower = right;
+    this.throttleF = throttleF;
+    this.throttleR = throttleR;
+    this.rotation = rotation;
 
     addRequirements(drivetrain);
   }
 
   @Override
   public void execute() {
-    drivetrain.tankDrive(leftPower.getAsDouble(), rightPower.getAsDouble());
+    drivetrain.arcadeDrive(throttleF.getAsDouble() - throttleR.getAsDouble(), rotation.getAsDouble());
   }
 
   @Override
