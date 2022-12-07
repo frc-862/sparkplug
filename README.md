@@ -3,8 +3,8 @@
 ### controls
 Arcade Drive
 
-Left Bumper - Index Down (Upper Belt, Indexer)
-Right Bumper - Index Up (Upper Belt, Indexer)
+Left Bumper - Index Down (Upper Belt, Indexer) <br>
+Right Bumper - Index Up (Upper Belt, Indexer) <br>
 
-A - Spinup flywheel
-B - Collect (Upper Belt, Bottom Belt, Spinny)
+A - Spinup flywheel <br>
+B - Collect (Upper Belt, Bottom Belt, Spinny) <br>
