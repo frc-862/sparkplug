@@ -19,6 +19,8 @@ public class Collector extends SubsystemBase {
     upperBelt = new Victor(RobotMap.UPPER_BELT);
     spinny = new Victor(RobotMap.SPINNY);
 
+    spinny.setInverted(true);
+
     CommandScheduler.getInstance().registerSubsystem(this);
   }
 
@@ -33,7 +35,7 @@ public class Collector extends SubsystemBase {
   }
 
   public void stopUpperBelt() {
-    upperBelt.set(0d);
+    runUpperBelt(0d);
   }
 
   public void stop() {

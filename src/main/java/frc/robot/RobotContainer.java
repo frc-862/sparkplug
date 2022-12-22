@@ -31,7 +31,7 @@ public class RobotContainer {
       drivetrain,
       () -> controller.getLeftTriggerAxis(),
       () -> controller.getRightTriggerAxis(),
-      () -> controller.getLeftX()
+      () -> -controller.getLeftX()
     ));
   }
 

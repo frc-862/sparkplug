@@ -7,8 +7,8 @@ public final class RobotMap {
     public static final int RIGHT = 0;
 
     // Collecter
-    public static final int LOWER_BELT = 3;
-    public static final int UPPER_BELT = 2;
+    public static final int LOWER_BELT = 2;
+    public static final int UPPER_BELT = 3;
     public static final int SPINNY = 5;
 
     // Spindexer
