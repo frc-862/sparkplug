@@ -5,50 +5,56 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ArcadeDrive;
+import frc.rainstorm.RainstormContainer;
+import frc.rainstorm.command.ArcadeDrive;
+import frc.rainstorm.command.TankDrive;
+import frc.rainstorm.subsystem.GenericSubsystem;
+import frc.robot.Constants.DefaultDemoSpeeds;
+import frc.robot.Constants.RobotMap;
 import frc.robot.commands.FlashRSL;
-import frc.robot.commands.RunCollector;
-import frc.robot.commands.RunShooter;
-import frc.robot.commands.RunSpindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RSL;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 
-public class RobotContainer {
-    private final RSL rsl = new RSL();
-    private final Drivetrain drivetrain = new Drivetrain();
-    private final Collector collector = new Collector();
-    private final Spindexer spindexer = new Spindexer(collector);
-    private final Shooter shooter = new Shooter();
+public class RobotContainer extends RainstormContainer {
 
-    private final XboxController controller = new XboxController(0);
+    private final GenericSubsystem rsl = new GenericSubsystem("RSL", 0.75,
+            new Victor(RobotMap.RSL));
+
+    private Drivetrain drivetrain = new Drivetrain();
+    private Collector collector = new Collector();
+    private Spindexer spindexer = new Spindexer(collector);
+
+    private GenericSubsystem shooter = new GenericSubsystem("Shooter", DefaultDemoSpeeds.SHOOTER,
+            new Victor(RobotMap.FLYWHEEL));
 
     public RobotContainer() {
+        super(new XboxController(0));
+
         configureButtonBindings();
+        configureDefaultCommands();
+    }
+
+    @Override
+    protected void configureButtonBindings() {
+        new Trigger(controller::getBButton).whileTrue(shooter.getRunCommand(() -> 0.75d));
+        new Trigger(controller::getLeftBumper).whileTrue(spindexer.getRunCommand(() -> -1d));
+        new Trigger(controller::getRightBumper).whileTrue(spindexer.getRunCommand(() -> 1d));
+    }
+
+    @Override
+    protected void configureDefaultCommands() {
         rsl.setDefaultCommand(new FlashRSL(rsl));
 
-        // drivetrain.setDefaultCommand(new ArcadeDrive(
-        //     drivetrain,
-        //     () -> controller.getLeftTriggerAxis() * drivetrain.getDemoSpeed(),
-        //     () -> controller.getRightTriggerAxis() * drivetrain.getDemoSpeed(),
-        //     () -> -controller.getLeftX() * drivetrain.getDemoSpeed()
-        // ));
+        drivetrain.setDefaultCommand(
+                new ArcadeDrive(drivetrain, () -> controller.getLeftY(), () -> controller.getRightX()));
+        // drivetrain.setDefaultCommand(new TankDrive(drivetrain, () ->
+        // controller.getLeftY(), () -> controller.getRightY()));
 
-        spindexer.setDefaultCommand(new RunSpindexer(spindexer, () -> (controller.getRightTriggerAxis() - controller.getLeftTriggerAxis())));
+        // Run spindexer based on controller triggers (right - left)
+        collector.setDefaultCommand(collector.getRunCommand(super.getTrigger()));
     }
 
-    private void configureButtonBindings() {
-        new Trigger(controller::getAButton).whileTrue(new RunShooter(shooter, () -> 0.75d));
-        // new Trigger(controller::getBButton).whileTrue(new RunCollector(collector, () -> 1d));
-        new Trigger(controller::getLeftBumper).whileTrue(new RunCollector(collector, () -> -1d));
-        new Trigger(controller::getRightBumper).whileTrue(new RunCollector(collector, () -> 1d));
-    }
-
-    public Command getAutonomousCommand() {
-        return null;
-    }
 }

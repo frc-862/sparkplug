@@ -1,0 +1,5 @@
+[submodule "src/main/java/frc/rainstorm/"]
+	url = git@github.com:frc-862/rainstorm.git
+[submodule "rainstorm"]
+	path = src/main/java/frc/rainstorm
+	url = git@github.com:frc-862/rainstorm.git

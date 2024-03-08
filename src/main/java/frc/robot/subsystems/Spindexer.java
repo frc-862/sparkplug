@@ -6,29 +6,31 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.RobotMap;
+import frc.rainstorm.subsystem.GenericSubsystem;
+import frc.robot.Constants.DefaultDemoSpeeds;
+import frc.robot.Constants.RobotMap;
 
-public class Spindexer extends SubsystemBase {
-  private Victor spindexMotor;
+public class Spindexer extends GenericSubsystem {
 
-  Collector collector;
+    private Collector collector;
 
-  public Spindexer(Collector collector) {
-    this.collector = collector;
+    public Spindexer(Collector collector) {
+        super(DefaultDemoSpeeds.SHOOTER, new Victor(RobotMap.SPINDEXER));
 
-    spindexMotor = new Victor(RobotMap.SPINDEXER);
+        this.collector = collector;
 
-    CommandScheduler.getInstance().registerSubsystem(this);
-  }
+        CommandScheduler.getInstance().registerSubsystem(this);
+    }
 
-  public void setPower(double power) {
-    spindexMotor.set(power);
-    collector.runUpperBelt(power);
-  }
+    @Override
+    public void setPower(double power) {
+        motor.set(parsePowerLimit(power));
+        collector.setUpperBelt(parsePowerLimit(power));
+    }
 
-  public void stop() {
-    setPower(0d);
-    collector.stopUpperBelt();
-  }
+    @Override
+    public void stop() {
+        setPower(0d);
+        collector.stopUpperBelt();
+    }
 }

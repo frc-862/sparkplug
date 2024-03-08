@@ -4,41 +4,69 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.RobotMap;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.rainstorm.subsystem.DemoSubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.RobotMap;
 
-public class Collector extends SubsystemBase {
-  public Victor lowerBelt;
-  public Victor upperBelt;
-  public Victor spinny;
+public class Collector extends DemoSubsystemBase {
 
-  public Collector() {
-    lowerBelt = new Victor(RobotMap.LOWER_BELT);
-    upperBelt = new Victor(RobotMap.UPPER_BELT);
-    spinny = new Victor(RobotMap.SPINNY);
+    private Victor lowerBelt;
+    private Victor upperBelt;
+    private Victor spinny;
 
-    spinny.setInverted(true);
+    public Collector() {
+        super(Constants.DefaultDemoSpeeds.COLLECTOR);
 
-    CommandScheduler.getInstance().registerSubsystem(this);
-  }
+        lowerBelt = new Victor(RobotMap.LOWER_BELT);
+        upperBelt = new Victor(RobotMap.UPPER_BELT);
+        spinny = new Victor(RobotMap.SPINNY);
 
-  public void setPower(double power) {
-    lowerBelt.set(power);
-    upperBelt.set(power);
-    spinny.set(power);
-  }
+        spinny.setInverted(true);
 
-  public void runUpperBelt(double power) {
-    upperBelt.set(power);
-  }
+        CommandScheduler.getInstance().registerSubsystem(this);
+    }
 
-  public void stopUpperBelt() {
-    runUpperBelt(0d);
-  }
+    public Command getRunCommand(DoubleSupplier power) {
+        return startEnd(() -> setPower(power.getAsDouble()), this::stop);
+    }
+    
+    public void setLowerBelt(double power) {
+        lowerBelt.set(parsePowerLimit(power));
+    }
 
-  public void stop() {
-    setPower(0);
-  }
+    public void setUpperBelt(double power) {
+        upperBelt.set(parsePowerLimit(power));
+    }
+
+    public void setSpinny(double power) {
+        spinny.set(parsePowerLimit(power));
+    }
+
+    public void stopUpperBelt() {
+        setUpperBelt(0d);
+    }
+
+    public void stopLowerBelt() {
+        setLowerBelt(0d);
+    }
+
+    public void stopSpinny() {
+        setSpinny(0d);
+    }
+
+    public void setPower(double power) {
+        setLowerBelt(power);
+        setUpperBelt(power);
+        setSpinny(power);
+    }
+
+    public void stop() {
+        setPower(0d);
+    }
 }
