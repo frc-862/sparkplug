@@ -4,59 +4,46 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LightningShuffleboard;
-import frc.robot.constants.RobotMap;
+import frc.rainstorm.subsystem.DemoDrivetrain;
+import frc.rainstorm.subsystem.DemoSubsystemBase;
+import frc.robot.Constants.DefaultDemoSpeeds;
+import frc.robot.Constants.RobotMap;
 
-public class Drivetrain extends SubsystemBase {
-  private Victor left;
-  private Victor right;
+public class Drivetrain extends DemoSubsystemBase implements DemoDrivetrain {
 
-  private DifferentialDrive drive;
+    private Victor left;
+    private Victor right;
 
-  private double demoSpeedVal;
+    private DifferentialDrive drive;
 
-  public Drivetrain() {
-    left = new Victor(RobotMap.LEFT);
-    right = new Victor(RobotMap.RIGHT);
+    public Drivetrain() {
+        super(DefaultDemoSpeeds.DRIVETRAIN);
 
-    left.setInverted(true);
-    right.setInverted(false);
+        left = new Victor(RobotMap.LEFT);
+        right = new Victor(RobotMap.RIGHT);
 
-    drive = new DifferentialDrive(left, right);
+        left.setInverted(true);
+        right.setInverted(false);
 
-    CommandScheduler.getInstance().registerSubsystem(this);
-  }
+        drive = new DifferentialDrive(left, right);
 
-  @Override
-  public void periodic() {
-    super.periodic();
+        CommandScheduler.getInstance().registerSubsystem(this);
+    }
 
-    demoSpeedVal = LightningShuffleboard.getDouble("Demo", "demoSpeed", 0.5);
-  }
+    @Override
+    public void tankDrive(double leftPower, double rightPower) {
+        drive.tankDrive(parsePowerLimit(leftPower), parsePowerLimit(rightPower), false);
+    }
 
-  public void tankDrive(double leftPower, double rightPower) {
-    // not sure if these are needed
-    leftPower *= 0.5;
-    rightPower *= 0.5;
-    drive.tankDrive(leftPower, rightPower, false);
-  }
+    @Override
+    public void arcadeDrive(double speed, double rotation) {
+        drive.arcadeDrive(parsePowerLimit(speed), parsePowerLimit(rotation), false);
+    }
 
-  public void arcadeDrive(double speed, double rotation) {
-    drive.arcadeDrive(speed, rotation, false);
-  }
-
-  public void stop() {
-    tankDrive(0d, 0d);
-  }
-
-  public double getDemoSpeed() {
-    return demoSpeedVal;
-  }
+    public void stop() {
+        tankDrive(0d, 0d);
+    }
 }

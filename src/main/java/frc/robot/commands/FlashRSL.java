@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.RSL;
+import frc.rainstorm.subsystem.GenericSubsystem;
 
 public class FlashRSL extends Command {
 
-    private RSL rsl;
+    private GenericSubsystem rsl;
 
     private int count = 0;
     private boolean state = true;
 
-    public FlashRSL(RSL rsl) {
+    public FlashRSL(GenericSubsystem rsl) {
         this.rsl = rsl;
 
         addRequirements(rsl);
@@ -22,23 +22,23 @@ public class FlashRSL extends Command {
 
     @Override
     public void initialize() {
-        rsl.set(true);
+        rsl.setPower(rsl.getPowerLimit());
 
     }
 
     @Override
     public void execute() {
         count++;
-        if (count == 15) {
+        if (count == 12) {
             state = !state;
-            rsl.set(state);
+            rsl.setPower(state ? rsl.getPowerLimit() : 0d);
             count = 0;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        rsl.set(false);
+        rsl.setPower(0d);
     }
 
     @Override
