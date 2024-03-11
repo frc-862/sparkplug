@@ -32,7 +32,7 @@ public class Collector extends DemoSubsystemBase {
         CommandScheduler.getInstance().registerSubsystem(this);
     }
 
-    public Command getRunCommand(DoubleSupplier power) {
+    public Command getStartEndCommand(DoubleSupplier power) {
         return startEnd(() -> setPower(power.getAsDouble()), this::stop);
     }
     

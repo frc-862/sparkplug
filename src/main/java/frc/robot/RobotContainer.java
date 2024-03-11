@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.rainstorm.RainstormContainer;
 import frc.rainstorm.command.ArcadeDrive;
@@ -39,9 +40,9 @@ public class RobotContainer extends RainstormContainer {
 
     @Override
     protected void configureButtonBindings() {
-        new Trigger(controller::getBButton).whileTrue(shooter.getRunCommand(() -> 0.75d));
-        new Trigger(controller::getLeftBumper).whileTrue(spindexer.getRunCommand(() -> -1d));
-        new Trigger(controller::getRightBumper).whileTrue(spindexer.getRunCommand(() -> 1d));
+        new Trigger(controller::getBButton).whileTrue(shooter.getStartEndCommand(() -> 0.75d));
+        new Trigger(controller::getLeftBumper).whileTrue(spindexer.getStartEndCommand(() -> -1d));
+        new Trigger(controller::getRightBumper).whileTrue(spindexer.getStartEndCommand(() -> 1d));
     }
 
     @Override
@@ -50,11 +51,12 @@ public class RobotContainer extends RainstormContainer {
 
         drivetrain.setDefaultCommand(
                 new ArcadeDrive(drivetrain, () -> controller.getLeftY(), () -> controller.getRightX()));
-        // drivetrain.setDefaultCommand(new TankDrive(drivetrain, () ->
-        // controller.getLeftY(), () -> controller.getRightY()));
+        // drivetrain.setDefaultCommand(
+        //         new TankDrive(drivetrain, () -> controller.getLeftY(), () -> controller.getRightY()));
 
-        // Run spindexer based on controller triggers (right - left)
-        collector.setDefaultCommand(collector.getRunCommand(super.getTrigger()));
+        // // Run spindexer based on controller triggers (right - left)
+        collector.setDefaultCommand(
+                new RunCommand(() -> collector.setPower(super.getTrigger().getAsDouble()), collector));
     }
 
 }
